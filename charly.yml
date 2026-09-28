@@ -1,7 +1,5 @@
-version: 2026.240.1943
 examplestep-deploy-consumer:
     candy:
-        version: 2026.175.1200
         candy:
             - '@github.com/opencharly/plugin-example-step/candy/plugin-example-step:v2026.239.1643'
         description: |-
