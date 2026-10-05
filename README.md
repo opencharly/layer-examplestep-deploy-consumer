@@ -11,7 +11,7 @@ target executor** stood up on the go-plugin broker (the `ExecutorService` revers
 channel) — so the plugin writes
 `/tmp/charly-examplestep/examplestep-deploy/{applied,probe}` on the target venue
 and returns a plugin-script reverse op the host records and replays at
-`charly fleet del`. Compose it **with** `candy/plugin-example-step` (which
+`charly deploy del`. Compose it **with** `candy/plugin-example-step` (which
 provides the `examplestep` verb); the deploy-context check proves the marker
 landed. This is the deploy-time counterpart of `layer-examplestep-consumer`
 (build context).
@@ -23,7 +23,7 @@ landed. This is the deploy-time counterpart of `layer-examplestep-consumer`
 | Layer / candy | `examplestep-deploy-consumer` |
 | Plugin verb | `examplestep` (provided by `candy/plugin-example-step`) |
 | Markers | `/tmp/charly-examplestep/examplestep-deploy/{applied,probe}` on the target venue |
-| Reverse op | recorded at deploy, replayed at `charly fleet del` |
+| Reverse op | recorded at deploy, replayed at `charly deploy del` |
 | Service / port | none |
 
 This is a **reference/fixture** candy: it exists to exercise and demonstrate the
