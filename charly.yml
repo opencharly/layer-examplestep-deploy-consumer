@@ -14,7 +14,8 @@ examplestep-deploy-consumer:
             and returns a plugin-script reverse op the host records + replays at `charly
             deploy del`. The deploy-time counterpart of candy/examplestep-consumer (build
             context). Compose it WITH candy/plugin-example-step (which provides the
-            examplestep verb); the deploy-context check below proves the marker landed.
+            examplestep verb); the LIVE-context check below proves the marker landed on
+            the target venue.
         plan:
             - run: at LOCAL/VM deploy charly lowers this run-step to an ExternalPluginStep, Invoking the examplestep plugin's OpExecute over the E3b reverse channel to write /tmp/charly-examplestep/examplestep-deploy/{applied,probe} on the target venue
               id: examplestep-deploy-apply
@@ -24,8 +25,18 @@ examplestep-deploy-consumer:
                 marker: examplestep-deploy
             - check: the deploy-time examplestep OpExecute ran over the reverse channel — the probe marker is present on the target venue
               id: examplestep-deploy-applied
+              # `context: [runtime]`: the live check mode's context. The former
+              # `context: [deploy]` was inert — the check engine activates `build` under
+              # `charly check box` and `runtime` under `charly check live`, so this step was
+              # skipped in both modes and this fixture's acceptance assertion never ran
+              # (opencharly/plugin-check#111).
               context:
-                - deploy
+                - runtime
               command:
+                # No `in_container: false`: that flag runs the command as a LOCAL process on
+                # the machine driving the check (plugin-command/candy/plugin-command/plugin.go,
+                # the `exec.CommandContext` branch), which is the TARGET only when the check
+                # runs on the target itself. The default (`in_container: true`) runs through
+                # the venue executor, so this assertion holds for `target: local` AND for a
+                # `target: vm` reached over SSH — which is what the step's own label claims.
                 command: "test -f /tmp/charly-examplestep/examplestep-deploy/probe"
-                in_container: false
