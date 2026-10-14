@@ -3,8 +3,10 @@
 Standalone reference/fixture candy repo for the **deploy-context**
 (verb-as-step deploy-execute) leg of external plugin execution. The candy lives
 in `charly.yml` at the repo root: the plugin-candy `candy:` reference, the
-deploy-context `run:` step with `plugin: examplestep`, and the deploy-context
-`check:` step that proves the marker landed on the target venue. It carries **no
+deploy-context `run:` step with `plugin: examplestep`, and the live-context
+`check:` step that proves the marker landed on the target venue (a live check
+mode context — `context: [runtime]`; `context: [deploy]` on a `check:` step is a
+no-op in both check modes). It carries **no
 `skill:` entity**, so no owning `/charly-<family>:<name>` skill is projected into
 the marketplace corpus.
 
@@ -39,8 +41,9 @@ repo's candy carries no `skill:` entity. The gap is recorded against
 - The candy's `plan:` `check:` step is the functional evidence:
   `examplestep-deploy-applied` asserts
   `/tmp/charly-examplestep/examplestep-deploy/probe` exists on the target venue
-  (deploy context, `in_container: false`), proving the deploy-time `OpExecute`
-  over the reverse channel ran.
+  (live context, `context: [runtime]`; through the venue executor, so it holds for
+  a `target: local` and for a `target: vm` reached over SSH), proving the
+  deploy-time `OpExecute` over the reverse channel ran.
 - The fixture only proves anything when composed WITH
   `candy/plugin-example-step`, which provides the `examplestep` verb, and
   deployed to a local/VM target.
@@ -49,7 +52,7 @@ repo's candy carries no `skill:` entity. The gap is recorded against
 
 - Edit the `examplestep-deploy-consumer:` candy entity in `charly.yml`. Keep the
   `plugin:` verb name aligned with the provider the plugin candy declares, and
-  keep the deploy-context `check:` asserting the marker on the venue.
+  keep the live-context `check:` asserting the marker on the venue.
 - This is a reference/fixture candy — a change here is a change to the documented
   deploy-context external-plugin example, so keep it minimal and observable.
 
